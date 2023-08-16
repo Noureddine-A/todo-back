@@ -41,6 +41,25 @@ class Todo {
         { $currentDate: { lastUpdated: true } }
       );
   }
+
+  filterTodo(filterBy) {
+    const db = getDb();
+
+    return db
+      .collection("todos")
+      .find({ completed: filterBy })
+      .toArray()
+      .then((result) => {
+        return result;
+      })
+      .catch((error) => console.log(error));
+  }
+
+  deleteCompletedTodos() {
+    const db = getDb();
+
+    return db.collection("todos").deleteMany({ completed: true });
+  }
 }
 
 module.exports = Todo;

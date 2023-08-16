@@ -48,3 +48,40 @@ exports.updateTodo = (req, res, next) => {
     )
     .catch((err) => console.log(err));
 };
+
+exports.fetchAllCompletedTodos = (req, res, next) => {
+  const todo = new Todo();
+
+  todo
+    .filterTodo(true)
+    .then((result) => {
+      res.send(JSON.stringify(result));
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.fetchAllActiveTodos = (req, res, next) => {
+  const todo = new Todo();
+
+  todo
+    .filterTodo(false)
+    .then((result) => {
+      res.send(JSON.stringify(result));
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.deleteAllCompletedTodos = (req, res, next) => {
+  console.log('e');
+  const todo = new Todo();
+  todo
+    .deleteCompletedTodos()
+    .then((result) => {
+      Todo.fetchAllTodos()
+        .then((todos) => {
+          res.send(JSON.stringify(todos));
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+};
