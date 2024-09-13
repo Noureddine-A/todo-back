@@ -22,6 +22,10 @@ app.use('/', (req, res, next) => {
   res.status(404).json({error: "Couldn't find resource."})
 })
 
+app.use((err, req, res, next) => {
+  res.status(err.status).send({error: err.message});
+})
+
 mongoose.connect("mongodb+srv://noureddine:lXGUT2FopDwCLK5f@cluster0.pvibp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 .then(result => {
     app.listen(8080);
