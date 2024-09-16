@@ -1,9 +1,16 @@
 const jwtoken = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    const token = req.get("Authorization").split(" ")[0];
+    const token = req.get("Authorization").split(" ")[1];
+     let decodedToken;
 
-    const decodedToken = jwtoken.verify(token, "asecretpasswordnoonewillknowabout");
+     try {
+        decodedToken = jwtoken.verify(token, "asecretpasswordnoonewillknowabout");
+     } catch (error) {
+        error.status = 500;
+        error.message = 'Something went wrong.'
+        throw error;
+     }
 
     if(!decodedToken) {
         let error = new Error();
@@ -12,6 +19,7 @@ module.exports = (req, res, next) => {
         throw error;
     }
 
-    console.log(decodedToken);
-    
+    req.user = decodedToken;
+
+    next();
 }
