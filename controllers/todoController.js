@@ -72,3 +72,32 @@ exports.updateTodo = (req, res, next) => {
       });
   });
 };
+
+exports.deleteCompletedTodos = (req, res, next) => {
+  User.findById(req.user.userId)
+    .then((user) => {
+      if (!user) {
+        let error = new Error();
+        error.status = 422;
+        error.message =
+          "Apparently something went wrong with deleting the todos. Try it again later.";
+        throw error;
+      }
+
+      let newList = user.todos.filter((todo) => {
+        return todo.completed === false;
+      });
+
+      user.todos = newList;
+      user.save()
+      .then(result => {
+        res.status(200).send({message: 'Successfully removed completed todos.'})
+      })
+
+    })
+    .catch((err) => {
+      err.status = 500;
+      err.message =
+        "Something went wrong with the server. Please try again later.";
+    });
+};

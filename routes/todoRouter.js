@@ -11,4 +11,6 @@ router.get('/get-todos', isAuth, todoController.getTodos);
 
 router.patch('/update-todo', isAuth, todoController.updateTodo);
 
+router.delete('/delete-todos', isAuth, todoController.deleteCompletedTodos);
+
 module.exports = router;
